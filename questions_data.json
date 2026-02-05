@@ -1,0 +1,55 @@
+{
+  "instruction": "Choisissez la bonne réponse",
+  "questions": [
+    {
+      "phrase": "____Le chat sur le toit_____.",
+      "propositions": ["marche", "nage", "vole", "dort", "plonge"],
+      "reponse_correcte": 0
+    },
+    {
+      "phrase": "2 + 2 = _____",
+      "propositions": ["3", "4", "5", "6", "7"],
+      "reponse_correcte": 1
+    },
+    {
+      "phrase": "_____La capitale de la France est _____",
+      "propositions": ["Londres", "Berlin", "Paris", "Rome", "Madrid"],
+      "reponse_correcte": 2
+    },
+    {
+      "phrase": "Il _____ beau aujourd'hui.",
+      "propositions": ["fait", "est", "a", "va", "peut"],
+      "reponse_correcte": 0
+    },
+    {
+      "phrase": "10 × 5 = _____",
+      "propositions": ["40", "45", "50", "55", "60"],
+      "reponse_correcte": 2
+    },
+    {
+      "phrase": "L'eau bout à _____ degrés Celsius.",
+      "propositions": ["50", "75", "100", "150", "200"],
+      "reponse_correcte": 2
+    },
+    {
+      "phrase": "Le soleil se lève à l'_____",
+      "propositions": ["ouest", "est", "nord", "sud", "centre"],
+      "reponse_correcte": 1
+    },
+    {
+      "phrase": "Un triangle a _____ côtés.",
+      "propositions": ["2", "3", "4", "5", "6"],
+      "reponse_correcte": 1
+    },
+    {
+      "phrase": "La Terre tourne autour du _____",
+      "propositions": ["Lune", "Soleil", "Mars", "Vénus", "Jupiter"],
+      "reponse_correcte": 1
+    },
+    {
+      "phrase": "5 × 5 = _____",
+      "propositions": ["20", "25", "30", "35", "40"],
+      "reponse_correcte": 1
+    }
+  ]
+}

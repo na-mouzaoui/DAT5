@@ -1,0 +1,55 @@
+{
+  "instruction": "Choisissez la bonne réponse",
+  "questions": [
+    {
+      "image_question": "problemeAbstraitImg/1.jpg",
+      "image_reponses": "reponseAbstraitImg/1.jpg",
+      "reponse_correcte": "A"
+    },
+    {
+      "image_question": "problemeAbstraitImg/2.jpg",
+      "image_reponses": "reponseAbstraitImg/2.jpg",
+      "reponse_correcte": "B"
+    },
+    {
+      "image_question": "problemeAbstraitImg/3.jpg",
+      "image_reponses": "reponseAbstraitImg/3.jpg",
+      "reponse_correcte": "C"
+    },
+    {
+      "image_question": "problemeAbstraitImg/4.jpg",
+      "image_reponses": "reponseAbstraitImg/4.jpg",
+      "reponse_correcte": "D"
+    },
+    {
+      "image_question": "problemeAbstraitImg/5.jpg",
+      "image_reponses": "reponseAbstraitImg/5.jpg",
+      "reponse_correcte": "E"
+    },
+    {
+      "image_question": "problemeAbstraitImg/6.jpg",
+      "image_reponses": "reponseAbstraitImg/6.jpg",
+      "reponse_correcte": "A"
+    },
+    {
+      "image_question": "problemeAbstraitImg/7.jpg",
+      "image_reponses": "reponseAbstraitImg/7.jpg",
+      "reponse_correcte": "C"
+    },
+    {
+      "image_question": "problemeAbstraitImg/8.jpg",
+      "image_reponses": "reponseAbstraitImg/8.jpg",
+      "reponse_correcte": "B"
+    },
+    {
+      "image_question": "problemeAbstraitImg/9.jpg",
+      "image_reponses": "reponseAbstraitImg/9.jpg",
+      "reponse_correcte": "D"
+    },
+    {
+      "image_question": "problemeAbstraitImg/10.jpg",
+      "image_reponses": "reponseAbstraitImg/10.jpg",
+      "reponse_correcte": "E"
+    }
+  ]
+}

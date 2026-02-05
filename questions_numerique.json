@@ -1,0 +1,83 @@
+{
+  "instruction": "Choisissez la bonne réponse",
+  "questions": [
+    {
+      "type": "vertical",
+      "operation": "addition",
+      "ligne1": "  245",
+      "ligne2": "+ 138",
+      "ligne_resultat": "  ???",
+      "propositions": ["373", "383", "393", "403", "413"],
+      "reponse_correcte": 1
+    },
+    {
+      "type": "vertical",
+      "operation": "soustraction",
+      "ligne1": "  567",
+      "ligne2": "- 289",
+      "ligne_resultat": "  ???",
+      "propositions": ["268", "278", "288", "298", "308"],
+      "reponse_correcte": 1
+    },
+    {
+      "type": "vertical",
+      "operation": "multiplication",
+      "ligne1": "   24",
+      "ligne2": "×  15",
+      "ligne_resultat": "  ???",
+      "propositions": ["340", "350", "360", "370", "380"],
+      "reponse_correcte": 2
+    },
+    {
+      "type": "racine",
+      "phrase": "√144 = ?",
+      "propositions": ["10", "11", "12", "13", "14"],
+      "reponse_correcte": 2
+    },
+    {
+      "type": "vertical",
+      "operation": "division",
+      "ligne1": "  144",
+      "ligne2": "÷  12",
+      "ligne_resultat": "  ???",
+      "propositions": ["10", "11", "12", "13", "14"],
+      "reponse_correcte": 2
+    },
+    {
+      "type": "racine",
+      "phrase": "√81 = ?",
+      "propositions": ["7", "8", "9", "10", "11"],
+      "reponse_correcte": 2
+    },
+    {
+      "type": "vertical",
+      "operation": "addition",
+      "ligne1": "  789",
+      "ligne2": "+ 456",
+      "ligne_resultat": " ????",
+      "propositions": ["1235", "1245", "1255", "1265", "1275"],
+      "reponse_correcte": 1
+    },
+    {
+      "type": "racine",
+      "phrase": "√225 = ?",
+      "propositions": ["13", "14", "15", "16", "17"],
+      "reponse_correcte": 2
+    },
+    {
+      "type": "vertical",
+      "operation": "multiplication",
+      "ligne1": "   36",
+      "ligne2": "×  12",
+      "ligne_resultat": "  ???",
+      "propositions": ["412", "422", "432", "442", "452"],
+      "reponse_correcte": 2
+    },
+    {
+      "type": "racine",
+      "phrase": "√100 = ?",
+      "propositions": ["8", "9", "10", "11", "12"],
+      "reponse_correcte": 2
+    }
+  ]
+}
