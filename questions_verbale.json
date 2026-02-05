@@ -1,0 +1,280 @@
+{
+  "instruction": "Choisissez la bonne réponse",
+  "questions": [
+  {
+    "phrase": "______ est à résoudre ce que intrigue est à ______.",
+    "propositions": [
+      "Problème ______ comploter",
+      "mystère ______ manœuvrer",
+      "réponse ______ planifier",
+      "énigme ______ dénouer",
+      "mystère ______ raconter"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à lire ce que église est à ______.",
+    "propositions": [
+      "bibliothèque ______ prier",
+      "lecteur ______ prêtre",
+      "lecture ______ prière",
+      "livre ______ messe",
+      "encyclopédie ______ bible"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à pêche ce que fusil est à ______.",
+    "propositions": [
+      "fruit ______ arme",
+      "ligne ______ chasse",
+      "poisson ______ soldat",
+      "arbre ______ balle",
+      "rivière ______ guerre"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à magicien ce que blague est à ______.",
+    "propositions": [
+      "sortilège ______ gag",
+      "tour ______ humour",
+      "sorcier ______ humoriste",
+      "sortilège ______ rire",
+      "tour ______ humoriste"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à langue ce que toucher est à ______.",
+    "propositions": [
+      "papille ______ nerf",
+      "organe ______ sens",
+      "goût ______ peau",
+      "gustatif ______ main",
+      "épicé ______ chaud"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à cour ce que étudier est à ______.",
+    "propositions": [
+      "récréation ______ cours",
+      "jeu ______ étude",
+      "jouer ______ classe",
+      "jouer ______ leçon",
+      "école ______ avenir"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à phrase ce que mot est à ______.",
+    "propositions": [
+      "paragraphe ______ message",
+      "mot ______ timbre",
+      "paragraphe ______ lettre",
+      "sujet ______ message",
+      "énoncé ______ mot"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à contrat ce que poignée de main est à ______.",
+    "propositions": [
+      "signature ______ geste",
+      "affaire ______ salutation",
+      "signature ______ pacte",
+      "affaire ______ geste",
+      "traité ______ raconter"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à pull ce que tissage est à ______.",
+    "propositions": [
+      "tricot ______ métier à tisser",
+      "tricot ______ tapisserie",
+      "veste ______ couverture",
+      "laine ______ fil",
+      "veste ______ métier à tisser"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à soirée ce que convoquer est à ______.",
+    "propositions": [
+      "inviter ______ tribunal",
+      "assister ______ ordre",
+      "réunir ______ jury",
+      "assister ______ amende",
+      "célébrer ______ procès"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à avion ce que mécanicien est à ______.",
+    "propositions": [
+      "jet ______ train",
+      "pilote ______ conducteur",
+      "pilote ______ train",
+      "aéroport ______ voie ferrée",
+      "ciel ______ voie ferrée"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à église ce que minaret est à ______.",
+    "propositions": [
+      "prêtre ______ muezzin",
+      "chrétien ______ musulman",
+      "rome ______ la mecque",
+      "clocher ______ mosquée",
+      "croix ______ croissant"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à pied ce que poignet est à ______.",
+    "propositions": [
+      "orteil ______ bras",
+      "palme ______ bracelet",
+      "marche ______ rotation",
+      "cheville ______ main",
+      "talon ______ paume"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à écrire ce que marmonner est à ______.",
+    "propositions": [
+      "lire ______ écouter",
+      "imprimer ______ murmurer",
+      "imprimer ______ entendre",
+      "gribouiller ______ écouter",
+      "gribouiller ______ parler"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à récompense ce que faute est à ______.",
+    "propositions": [
+      "travail ______ paresse",
+      "succès ______ délit",
+      "courage ______ erreur",
+      "mérite ______ punition",
+      "réussite ______ échec"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à produit ce que ferme est à ______.",
+    "propositions": [
+      "industrie ______ élevage",
+      "fabrication ______ culture",
+      "ouvrier ______ récolte",
+      "industrie ______ champs",
+      "usine ______ récolte"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à pavillon ce que beaucoup est à ______.",
+    "propositions": [
+      "un ______ immeuble",
+      "maison ______ quartier",
+      "famille ______ communauté",
+      "banlieue ______ ville",
+      "oreille ______ nombreux"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à merle ce que poil est à ______.",
+    "propositions": [
+      "oiseau ______ animal",
+      "nid ______ fourrure",
+      "plume ______ pelage",
+      "plume ______ renard",
+      "aile ______ fourrure"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à animal ce que prison est à ______.",
+    "propositions": [
+      "cage ______ cellule",
+      "cage ______ homme",
+      "dresseur ______ gardien",
+      "forêt ______ malfaiteur",
+      "nature ______ punition"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à école ce que docteur est à ______.",
+    "propositions": [
+      "enseignement ______ médicament",
+      "écolier ______ médecin",
+      "leçon ______ maladie",
+      "enseignement ______ hôpital",
+      "professeur ______ hôpital"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à falsifié ce que véritable est à ______.",
+    "propositions": [
+      "factice ______ authentique",
+      "réel ______ vrai",
+      "masqué ______ réel",
+      "authentique ______ sincère",
+      "frauduleux ______ factice"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à futur ce que regret est à ______.",
+    "propositions": [
+      "espoir ______ éternel",
+      "demain ______ hier",
+      "espoir ______ chagrin",
+      "espoir ______ passé",
+      "projet ______ chagrin"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à élection ce que postulant est à ______.",
+    "propositions": [
+      "vote ______ entretien",
+      "électeur ______ candidat",
+      "campagne ______ emploi",
+      "candidat ______ emploi",
+      "électeur ______ affaires"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à retard ce que premier est à ______.",
+    "propositions": [
+      "précoce ______ second",
+      "dernier ______ second",
+      "lent ______ rapide",
+      "avance ______ dernier",
+      "tardif ______ dernier"
+    ],
+    "reponse_correcte": null
+  },
+  {
+    "phrase": "______ est à gloire ce que blâme est à ______.",
+    "propositions": [
+      "louange ______ infamie",
+      "chant ______ soldat",
+      "louange ______ mensonge",
+      "ange ______ paradis",
+      "compliment ______ vaurien"
+    ],
+    "reponse_correcte": null
+  }
+]
+}

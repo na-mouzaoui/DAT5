@@ -2,6 +2,24 @@
   "instruction": "Choisissez la bonne réponse",
   "questions": [
     {
+      "type": "operations_verticales",
+      "phrase": "Quelle opération donne un résultat égal à 1?",
+      "propositions": [
+        {"ligne1": "  5", "ligne2": "+ 4", "ligne_resultat": "  ?"},
+        {"ligne1": "  3", "ligne2": "- 2", "ligne_resultat": "  ?"},
+        {"ligne1": "  2", "ligne2": "× 1", "ligne_resultat": "  ?"},
+        {"ligne1": "  4", "ligne2": "÷ 4", "ligne_resultat": "  ?"},
+        {"ligne1": "  6", "ligne2": "- 4", "ligne_resultat": "  ?"}
+      ],
+      "reponse_correcte": 3
+    },
+    {
+      "type": "racine",
+      "phrase": "2 × 100 000 + 8 × 1000 + 9 × 10 est égal à :",
+      "propositions": ["208090", "208900", "280090", "280900", "209080"],
+      "reponse_correcte": 0
+    },
+    {
       "type": "vertical",
       "operation": "addition",
       "ligne1": "  245",

@@ -1,9 +1,6 @@
 import sys
 import json
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
-                             QHBoxLayout, QLabel, QRadioButton, QPushButton,
-                             QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,
-                             QStackedWidget, QInputDialog, QScrollArea)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,QHBoxLayout, QLabel, QRadioButton, QPushButton,QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,QStackedWidget, QInputDialog, QScrollArea)
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont
 import datetime
@@ -40,7 +37,7 @@ app_state = {
 def load_questions():
     """Charger les questions depuis le fichier JSON"""
     try:
-        with open('questions_data.json', 'r', encoding='utf-8') as f:
+        with open('questions_verbale.json', 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
         QMessageBox.critical(None, "Erreur", f"Erreur lors du chargement des questions:\n{str(e)}")
@@ -70,8 +67,8 @@ def time_expired():
 
 def generate_pdf_report():
     """Générer le rapport PDF"""
-    score = sum(1 for i, (_, _, _, correct) in enumerate(app_state['questions'])
-                if app_state['user_answers'][i] == correct)
+    score = sum(1 for i, question in enumerate(app_state['questions'])
+                if app_state['user_answers'][i] == question.get('reponse_correcte', -1))
     total_questions = len(app_state['questions'])
     
     try:
@@ -120,11 +117,13 @@ def start_test():
 def display_question():
     """Afficher la question actuelle"""
     idx = app_state['current_question']
-    question, consigne, propositions, _ = app_state['questions'][idx]
+    question_data = app_state['questions'][idx]
     
     app_state['question_label'].setText(f"Question {idx + 1} / {len(app_state['questions'])}")
-    app_state['instruction_label'].setText(consigne)
-    app_state['phrase_label'].setText(question)
+    app_state['instruction_label'].setText("Choisissez la bonne réponse")
+    app_state['phrase_label'].setText(question_data.get('phrase', ''))
+    
+    propositions = question_data.get('propositions', [])
     
     for i, radio in enumerate(app_state['radio_buttons']):
         if i < len(propositions):
@@ -186,8 +185,8 @@ def request_password():
 
 def show_report():
     """Afficher le rapport de résultats"""
-    score = sum(1 for i, (_, _, _, correct) in enumerate(app_state['questions'])
-                if app_state['user_answers'][i] == correct)
+    score = sum(1 for i, question in enumerate(app_state['questions'])
+                if app_state['user_answers'][i] == question.get('reponse_correcte', -1))
     percentage = (score / len(app_state['questions'])) * 100
     
     classification_colors = [
@@ -787,8 +786,17 @@ def main():
     """Fonction principale"""
     app = QApplication(sys.argv)
     
-    if not load_questions():
+    data = load_questions()
+    if not data:
         sys.exit(1)
+    
+    app_state['questions'] = data.get('questions', [])
+    if not app_state['questions']:
+        QMessageBox.critical(None, "Erreur", "Aucune question trouvée dans le fichier JSON.")
+        sys.exit(1)
+    
+    # Initialiser les réponses utilisateur
+    app_state['user_answers'] = [-1] * len(app_state['questions'])
     
     window = QMainWindow()
     window.setWindowTitle("Test de Compétence")

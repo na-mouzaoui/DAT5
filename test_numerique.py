@@ -1,9 +1,6 @@
 import sys
 import json
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
-                             QHBoxLayout, QLabel, QRadioButton, QPushButton,
-                             QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,
-                             QStackedWidget, QInputDialog, QScrollArea)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,QHBoxLayout, QLabel, QRadioButton, QPushButton,QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,QStackedWidget, QInputDialog, QScrollArea)
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont
 import datetime
@@ -25,14 +22,6 @@ class TestNumeriqueModern(QMainWindow):
         self.timer_label = None
         
         self.init_ui()
-    
-    def load_questions(self):
-        try:
-            with open('questions_numerique.json', 'r', encoding='utf-8') as f:
-                self.questions = json.load(f)
-        except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Erreur lors du chargement des questions:\n{str(e)}")
-            sys.exit(1)
     
     def update_timer(self):
         """Mettre à jour le compte à rebours"""
@@ -165,35 +154,14 @@ class TestNumeriqueModern(QMainWindow):
         }
         self.stacked_widget.setCurrentWidget(self.instructions_page)
 
-    def init_ui(self):
-            'sexe': sexe,
-            'date': datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
-        }
-        self.stacked_widget.setCurrentWidget(self.instructions_page)
-
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Test de Calcul Numérique")
-        self.setStyleSheet("QMainWindow { background: #fff; }")
-        self.load_questions()
-        self.current_question = 0
-        self.user_answers = [-1] * len(self.questions)
-        self.candidat_info = {}
-        
-        # Timer de 20 minutes
-        self.time_remaining = 20 * 60  # 20 minutes en secondes
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_timer)
-        self.timer_label = None
-        
-        self.init_ui()
-
     def load_questions(self):
         try:
             with open('questions_numerique.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            self.instruction = data['instruction']
-            self.questions = data['questions']
+            self.instruction = data.get('instruction', 'Choisissez la bonne réponse')
+            self.questions = data.get('questions', [])
+            if not self.questions:
+                raise ValueError("Aucune question trouvée dans le fichier JSON.")
         except Exception as e:
             QMessageBox.critical(self, "Erreur", str(e))
             sys.exit(1)
@@ -405,8 +373,8 @@ class TestNumeriqueModern(QMainWindow):
     def create_test_page(self):
         page = QWidget()
         layout = QVBoxLayout(page)
-        layout.setContentsMargins(40, 40, 40, 40)
-        layout.setSpacing(32)
+        layout.setContentsMargins(40, 20, 40, 20)
+        layout.setSpacing(0)
 
         # crée des placeholders pour éviter les connexions avant définition
         self.previous_question = lambda: None
@@ -415,36 +383,53 @@ class TestNumeriqueModern(QMainWindow):
         self.on_answer_selected = lambda idx: None
         self.display_question = lambda: None
 
+        # ===== PARTIE 1/5 : Header (Timer + Question + Instruction) =====
+        header_container = QWidget()
+        header_layout = QVBoxLayout(header_container)
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        header_layout.setSpacing(5)
+        header_layout.setAlignment(Qt.AlignTop)
+        
         # Timer
         self.timer_label = QLabel("Temps restant: 20:00")
-        self.timer_label.setFont(QFont("Arial", 18, QFont.Bold))
+        self.timer_label.setFont(QFont("Arial", 16, QFont.Bold))
         self.timer_label.setAlignment(Qt.AlignCenter)
-        self.timer_label.setStyleSheet("color: #4CAF50; font-size: 18px; font-weight: bold; padding: 10px;")
-        layout.addWidget(self.timer_label)
+        self.timer_label.setStyleSheet("color: #4CAF50; font-size: 16px; font-weight: bold; padding: 5px;")
+        header_layout.addWidget(self.timer_label)
 
         # Titre question
         self.question_label = QLabel()
-        self.question_label.setFont(QFont("Arial", 22, QFont.Bold))
+        self.question_label.setFont(QFont("Arial", 20, QFont.Bold))
         self.question_label.setAlignment(Qt.AlignCenter)
-        self.question_label.setStyleSheet("color: #111; background: transparent; padding: 10px;")
-        layout.addWidget(self.question_label)
+        self.question_label.setStyleSheet("color: #111; background: transparent; padding: 5px;")
+        header_layout.addWidget(self.question_label)
 
         # Consigne
         self.instruction_label = QLabel(self.instruction)
-        self.instruction_label.setFont(QFont("Arial", 15))
+        self.instruction_label.setFont(QFont("Arial", 14))
         self.instruction_label.setWordWrap(True)
         self.instruction_label.setAlignment(Qt.AlignCenter)
-        self.instruction_label.setStyleSheet("color: #444; background: transparent; padding: 10px;")
-        layout.addWidget(self.instruction_label)
+        self.instruction_label.setStyleSheet("color: #444; background: transparent; padding: 5px;")
+        header_layout.addWidget(self.instruction_label)
+        
+        header_layout.addStretch()
+        layout.addWidget(header_container, 1)  # 1/5 de l'espace
 
-        # Conteneur opération
+        # ===== PARTIES 2-3/5 : Opération/Phrase au milieu =====
         self.operation_container = QWidget()
         self.operation_layout = QVBoxLayout(self.operation_container)
         self.operation_layout.setAlignment(Qt.AlignCenter)
-        self.operation_layout.setSpacing(10)
-        layout.addWidget(self.operation_container)
+        self.operation_layout.setSpacing(5)
+        self.operation_layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.operation_container, 2)  # 2/5 de l'espace
 
-        # Propositions
+        # ===== PARTIE 4/5 : Propositions =====
+        propositions_wrapper = QWidget()
+        propositions_wrapper_layout = QVBoxLayout(propositions_wrapper)
+        propositions_wrapper_layout.setContentsMargins(0, 0, 0, 0)
+        propositions_wrapper_layout.setSpacing(0)
+        propositions_wrapper_layout.setAlignment(Qt.AlignCenter)
+        
         self.propositions_container = QWidget()
         self.propositions_layout = QHBoxLayout(self.propositions_container)
         self.propositions_layout.setSpacing(24)
@@ -465,7 +450,7 @@ class TestNumeriqueModern(QMainWindow):
                 background: #ededed;
                 color: #222;
                 font-weight: bold;
-                border: 2px solid #000; /* contour noir pour le choix sélectionné */
+                border: 2px solid #000;
             }
             QRadioButton::indicator {
                 width: 0px;
@@ -481,9 +466,17 @@ class TestNumeriqueModern(QMainWindow):
             self.button_group.addButton(radio, i)
             self.radio_buttons.append(radio)
             self.propositions_layout.addWidget(radio)
-        layout.addWidget(self.propositions_container)
+        
+        propositions_wrapper_layout.addWidget(self.propositions_container)
+        layout.addWidget(propositions_wrapper, 1)  # 1/5 de l'espace
 
-        # Navigation
+        # ===== PARTIE 5/5 : Navigation =====
+        nav_wrapper = QWidget()
+        nav_wrapper_layout = QVBoxLayout(nav_wrapper)
+        nav_wrapper_layout.setContentsMargins(0, 0, 0, 0)
+        nav_wrapper_layout.setSpacing(0)
+        nav_wrapper_layout.setAlignment(Qt.AlignBottom)
+        
         nav_container = QWidget()
         nav_layout = QHBoxLayout(nav_container)
         nav_layout.setContentsMargins(0, 0, 0, 0)
@@ -550,7 +543,9 @@ class TestNumeriqueModern(QMainWindow):
         self.submit_button.clicked.connect(lambda: self.submit_test())
         self.submit_button.hide()
         nav_layout.addWidget(self.submit_button)
-        layout.addWidget(nav_container)
+        
+        nav_wrapper_layout.addWidget(nav_container)
+        layout.addWidget(nav_wrapper, 1)  # 1/5 de l'espace
 
         # Pour afficher dynamiquement les opérations
         self.operation_labels = []
@@ -563,18 +558,19 @@ class TestNumeriqueModern(QMainWindow):
                 label.deleteLater()
             self.operation_labels.clear()
             question = self.questions[self.current_question]
-            # Affichage opération
+            
+            # Affichage opération selon le type
             if question.get('type') == 'vertical':
                 label1 = QLabel(question['ligne1'])
-                label1.setFont(QFont("Courier New", 32, QFont.Bold))
+                label1.setFont(QFont("Courier New", 28, QFont.Bold))
                 label1.setAlignment(Qt.AlignRight)
-                label1.setStyleSheet("color: #222; background: transparent; padding: 5px 20px;")
+                label1.setStyleSheet("color: #222; background: transparent; padding: 3px 20px;")
                 self.operation_layout.addWidget(label1)
                 self.operation_labels.append(label1)
                 label2 = QLabel(question['ligne2'])
-                label2.setFont(QFont("Courier New", 32, QFont.Bold))
+                label2.setFont(QFont("Courier New", 28, QFont.Bold))
                 label2.setAlignment(Qt.AlignRight)
-                label2.setStyleSheet("color: #222; background: transparent; padding: 5px 20px;")
+                label2.setStyleSheet("color: #222; background: transparent; padding: 3px 20px;")
                 self.operation_layout.addWidget(label2)
                 self.operation_labels.append(label2)
                 separator = QFrame()
@@ -585,26 +581,113 @@ class TestNumeriqueModern(QMainWindow):
                 self.operation_layout.addWidget(separator)
                 self.operation_labels.append(separator)
                 label_result = QLabel(question['ligne_resultat'])
-                label_result.setFont(QFont("Courier New", 32, QFont.Bold))
+                label_result.setFont(QFont("Courier New", 28, QFont.Bold))
                 label_result.setAlignment(Qt.AlignRight)
-                label_result.setStyleSheet("color: #222; background: transparent; padding: 5px 20px;")
+                label_result.setStyleSheet("color: #222; background: transparent; padding: 3px 20px;")
                 self.operation_layout.addWidget(label_result)
                 self.operation_labels.append(label_result)
-            elif question.get('type') == 'racine':
+            elif question.get('type') == 'racine' or question.get('type') == 'phrase':
                 label = QLabel(question['phrase'])
-                label.setFont(QFont("Arial", 32, QFont.Bold))
+                label.setFont(QFont("Arial", 24, QFont.Bold))
                 label.setAlignment(Qt.AlignCenter)
-                label.setStyleSheet("color: #222; background: transparent;")
+                label.setStyleSheet("color: #222; background: transparent; padding: 5px;")
                 self.operation_layout.addWidget(label)
                 self.operation_labels.append(label)
-            # Affichage propositions
-            # Aucun choix pré-sélectionné sur nouvelle question : décocher tous
+            elif question.get('type') == 'operations_verticales':
+                # Afficher la question textuelle
+                phrase_label = QLabel(question['phrase'])
+                phrase_label.setFont(QFont("Arial", 18, QFont.Bold))
+                phrase_label.setAlignment(Qt.AlignCenter)
+                phrase_label.setStyleSheet("color: #222; background: transparent; padding: 5px;")
+                self.operation_layout.addWidget(phrase_label)
+                self.operation_labels.append(phrase_label)
+                
+                # Ajouter un petit espacement
+                self.operation_layout.addSpacing(5)
+                
+                # Créer un conteneur pour les opérations verticales
+                ops_container = QWidget()
+                ops_layout = QHBoxLayout(ops_container)
+                ops_layout.setSpacing(40)
+                ops_layout.setContentsMargins(0, 0, 0, 0)
+                
+                letters = ['A', 'B', 'C', 'D', 'E']
+                for i, op_data in enumerate(question['propositions'][:5]):
+                    # Conteneur pour chaque opération + son bouton radio
+                    op_col = QWidget()
+                    op_col_layout = QVBoxLayout(op_col)
+                    op_col_layout.setSpacing(0)
+                    op_col_layout.setAlignment(Qt.AlignCenter)
+                    
+                    # Conteneur pour l'opération verticale
+                    op_widget = QWidget()
+                    op_widget.setStyleSheet("background: white;")
+                    op_inner_layout = QVBoxLayout(op_widget)
+                    op_inner_layout.setSpacing(0)
+                    op_inner_layout.setContentsMargins(10, 0, 10, 0)
+                    
+                    # Afficher l'opération verticale
+                    ligne1_lbl = QLabel(op_data['ligne1'])
+                    ligne1_lbl.setFont(QFont("Courier New", 24, QFont.Bold))
+                    ligne1_lbl.setAlignment(Qt.AlignRight)
+                    ligne1_lbl.setStyleSheet("color: #222; background: transparent;")
+                    op_inner_layout.addWidget(ligne1_lbl)
+                    
+                    ligne2_lbl = QLabel(op_data['ligne2'])
+                    ligne2_lbl.setFont(QFont("Courier New", 24, QFont.Bold))
+                    ligne2_lbl.setAlignment(Qt.AlignRight)
+                    ligne2_lbl.setStyleSheet("color: #222; background: transparent;")
+                    op_inner_layout.addWidget(ligne2_lbl)
+                    
+                    # Trait horizontal
+                    sep = QFrame()
+                    sep.setFrameShape(QFrame.HLine)
+                    sep.setFrameShadow(QFrame.Plain)
+                    sep.setStyleSheet("background-color: #222;")
+                    sep.setFixedHeight(2)
+                    sep.setMinimumWidth(60)
+                    op_inner_layout.addWidget(sep)
+                    
+                    result_lbl = QLabel(op_data['ligne_resultat'])
+                    result_lbl.setFont(QFont("Courier New", 24, QFont.Bold))
+                    result_lbl.setAlignment(Qt.AlignRight)
+                    result_lbl.setStyleSheet("color: #222; background: transparent;")
+                    op_inner_layout.addWidget(result_lbl)
+                    
+                    op_col_layout.addWidget(op_widget)
+                    
+                    # Bouton radio avec lettre en dessous
+                    op_col_layout.addSpacing(3)
+                    self.radio_buttons[i].setText(letters[i])
+                    self.radio_buttons[i].setFont(QFont("Arial", 16, QFont.Bold))
+                    op_col_layout.addWidget(self.radio_buttons[i], alignment=Qt.AlignCenter)
+                    
+                    ops_layout.addWidget(op_col)
+                
+                self.operation_layout.addWidget(ops_container)
+                self.operation_labels.append(ops_container)
+                
+                # Décocher tous les boutons
+                self.button_group.setExclusive(False)
+                for r in self.radio_buttons:
+                    r.setChecked(False)
+                self.button_group.setExclusive(True)
+                
+                # Cacher le conteneur de propositions standard
+                self.propositions_container.hide()
+                return  # Sortir tôt pour ne pas traiter les propositions normalement
+            
+            # Affichage propositions normales
+            self.propositions_container.show()
             self.button_group.setExclusive(False)
             for r in self.radio_buttons:
                 r.setChecked(False)
+                r.setFont(QFont("Arial", 16))  # Réinitialiser la police
             self.button_group.setExclusive(True)
+            
             for i, (radio, option) in enumerate(zip(self.radio_buttons, question['propositions'])):
-                radio.setText(option)
+                radio.setText(str(option))
+            
             # Navigation
             self.prev_button.setEnabled(self.current_question > 0)
             if self.current_question == len(self.questions) - 1:
@@ -774,7 +857,17 @@ class TestNumeriqueModern(QMainWindow):
         
         return page
 
-    # ...existing logic for validate_form, start_test, request_password, show_report, etc. ...
+    def request_password(self):
+        """Demander le mot de passe pour le rapport"""
+        password, ok = QInputDialog.getText(self, "Mot de passe requis",
+                                           "Entrez le mot de passe:", QLineEdit.Password)
+        if ok:
+            if password == "dadou76":
+                self.show_report()
+            else:
+                QMessageBox.warning(self, "Mot de passe incorrect",
+                                  "Le mot de passe est incorrect.")
+                self.request_password()
 
 
 def main():

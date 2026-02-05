@@ -1,10 +1,7 @@
 import sys
 import json
 import os
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
-                             QHBoxLayout, QLabel, QRadioButton, QPushButton,
-                             QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,
-                             QStackedWidget, QInputDialog, QScrollArea)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,QHBoxLayout, QLabel, QRadioButton, QPushButton,QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,QStackedWidget, QInputDialog, QScrollArea)
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont, QPixmap
 import datetime
@@ -30,7 +27,7 @@ app_state = {
     'question_image_label': None,
     'reponses_image_label': None,
     'button_group': None,
-    'radio_buttons': [],
+    'radio_buttons': {},
     'nom_input': None,
     'prenom_input': None,
     'age_input': None,
@@ -126,15 +123,15 @@ def display_question():
     question_data = app_state['questions'][idx]
     
     app_state['question_label'].setText(f"Question {idx + 1} / {len(app_state['questions'])}")
-    app_state['instruction_label'].setText(question_data.get('consigne', ''))
+    app_state['instruction_label'].setText("Choisissez la bonne réponse")
     
-    question_img_path = question_data.get('question_image', '')
+    question_img_path = question_data.get('image_question', '')
     if os.path.exists(question_img_path):
         pixmap = QPixmap(question_img_path)
         scaled_pixmap = pixmap.scaled(800, 400, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         app_state['question_image_label'].setPixmap(scaled_pixmap)
     
-    reponses_img_path = question_data.get('reponses_image', '')
+    reponses_img_path = question_data.get('image_reponses', '')
     if os.path.exists(reponses_img_path):
         pixmap = QPixmap(reponses_img_path)
         scaled_pixmap = pixmap.scaled(800, 400, Qt.KeepAspectRatio, Qt.SmoothTransformation)
@@ -142,10 +139,12 @@ def display_question():
     
     saved_answer = app_state['user_answers'][idx]
     if saved_answer is not None and saved_answer != -1:
-        app_state['radio_buttons'][saved_answer].setChecked(True)
+        radio = app_state['radio_buttons'].get(saved_answer)
+        if radio:
+            radio.setChecked(True)
     else:
         app_state['button_group'].setExclusive(False)
-        for radio in app_state['radio_buttons']:
+        for radio in app_state['radio_buttons'].values():
             radio.setChecked(False)
         app_state['button_group'].setExclusive(True)
 
@@ -778,8 +777,17 @@ def main():
     """Fonction principale"""
     app = QApplication(sys.argv)
     
-    if not load_questions():
+    data = load_questions()
+    if not data:
         sys.exit(1)
+    
+    app_state['questions'] = data.get('questions', [])
+    if not app_state['questions']:
+        QMessageBox.critical(None, "Erreur", "Aucune question trouvée dans le fichier JSON.")
+        sys.exit(1)
+    
+    # Initialiser les réponses utilisateur
+    app_state['user_answers'] = [None] * len(app_state['questions'])
     
     window = QMainWindow()
     window.setWindowTitle("Test de Raisonnement Abstrait")
