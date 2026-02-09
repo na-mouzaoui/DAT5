@@ -1,27 +1,45 @@
 import sys
 import json
+import traceback
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,QHBoxLayout, QLabel, QRadioButton, QPushButton,QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,QStackedWidget, QInputDialog, QScrollArea)
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont
 import datetime
-from pdf_generator import generate_test_report_pdf
+try:
+    from pdf_generator import generate_test_report_pdf
+    PDF_AVAILABLE = True
+except Exception as e:
+    print(f"Erreur lors de l'import du générateur PDF: {e}")
+    PDF_AVAILABLE = False
 
 class TestNumeriqueModern(QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Test de Calcul Numérique")
-        self.setStyleSheet("QMainWindow { background: #fff; }")
-        self.load_questions()
-        self.current_question = 0
-        self.user_answers = [-1] * len(self.questions)
-        self.candidat_info = {}
+        try:
+            super().__init__()
+            print("Initialisation de la fenêtre...")
+            self.setWindowTitle("Test de Calcul Numérique")
+            self.setStyleSheet("QMainWindow { background: #fff; }")
+            print("Chargement des questions...")
+            self.load_questions()
+            self.current_question = 0
+            self.user_answers = [-1] * len(self.questions)
+            self.candidat_info = {}
+            print(f"{len(self.questions)} questions chargées avec succès")
         
-        self.time_remaining = 20 * 60
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_timer)
-        self.timer_label = None
-        
-        self.init_ui()
+            self.time_remaining = 20 * 60
+            self.timer = QTimer()
+            self.timer.timeout.connect(self.update_timer)
+            self.timer_label = None
+            
+            print("Initialisation de l'interface...")
+            self.init_ui()
+            print("Interface initialisée avec succès")
+        except Exception as e:
+            print(f"ERREUR lors de l'initialisation: {e}")
+            traceback.print_exc()
+            QMessageBox.critical(None, "Erreur d'initialisation", 
+                               f"Une erreur s'est produite lors de l'initialisation:\n{str(e)}")
+            sys.exit(1)
     
     def update_timer(self):
         """Mettre à jour le compte à rebours"""
@@ -51,15 +69,25 @@ class TestNumeriqueModern(QMainWindow):
                     if self.user_answers[i] == q['reponse_correcte'])
         total_questions = len(self.questions)
         
+        if not PDF_AVAILABLE:
+            QMessageBox.warning(self, "PDF non disponible", 
+                              "La génération de PDF n'est pas disponible.\n"
+                              "Installez reportlab avec: pip install reportlab")
+            return
+        
         try:
+            print("Génération du PDF...")
             pdf_path = generate_test_report_pdf(
                 self.candidat_info,
                 score,
                 total_questions,
                 "Calcul Numérique"
             )
+            print(f"PDF généré: {pdf_path}")
             QMessageBox.information(self, "PDF généré", f"Le rapport a été téléchargé avec succès:\n{pdf_path}")
         except Exception as e:
+            print(f"Erreur PDF: {e}")
+            traceback.print_exc()
             QMessageBox.critical(self, "Erreur", f"Erreur lors de la génération du PDF:\n{str(e)}")
     
     def show_report(self):
@@ -156,14 +184,29 @@ class TestNumeriqueModern(QMainWindow):
 
     def load_questions(self):
         try:
+            print("Ouverture du fichier questions_numerique.json...")
             with open('questions_numerique.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
             self.instruction = data.get('instruction', 'Choisissez la bonne réponse')
             self.questions = data.get('questions', [])
             if not self.questions:
                 raise ValueError("Aucune question trouvée dans le fichier JSON.")
+            print(f"Questions chargées: {len(self.questions)}")
+        except FileNotFoundError:
+            error_msg = "Le fichier 'questions_numerique.json' est introuvable."
+            print(f"ERREUR: {error_msg}")
+            QMessageBox.critical(None, "Erreur", error_msg)
+            sys.exit(1)
+        except json.JSONDecodeError as e:
+            error_msg = f"Erreur de format JSON: {str(e)}"
+            print(f"ERREUR: {error_msg}")
+            QMessageBox.critical(None, "Erreur", error_msg)
+            sys.exit(1)
         except Exception as e:
-            QMessageBox.critical(self, "Erreur", str(e))
+            error_msg = f"Erreur lors du chargement des questions: {str(e)}"
+            print(f"ERREUR: {error_msg}")
+            traceback.print_exc()
+            QMessageBox.critical(None, "Erreur", error_msg)
             sys.exit(1)
 
     def init_ui(self):
@@ -278,11 +321,7 @@ class TestNumeriqueModern(QMainWindow):
         sexe_row_layout.addStretch()
         form_layout.addRow(sexe_label, sexe_row)
         main_layout.addWidget(form_container, alignment=Qt.AlignCenter)
-        sep = QFrame()
-        sep.setFrameShape(QFrame.HLine)
-        sep.setFrameShadow(QFrame.Sunken)
-        sep.setStyleSheet("background: #fff; min-height: 1px; max-height: 1px; margin: 18px 0;")
-        main_layout.addWidget(sep)
+        main_layout.addSpacing(20)
         next_btn = QPushButton("Continuer")
         next_btn.setFont(QFont("Arial", 15, QFont.Bold))
         next_btn.setFixedHeight(40)
@@ -337,11 +376,7 @@ class TestNumeriqueModern(QMainWindow):
             label.setWordWrap(True)
             instructions_layout.addWidget(label)
         layout.addWidget(instructions_container)
-        sep = QFrame()
-        sep.setFrameShape(QFrame.HLine)
-        sep.setFrameShadow(QFrame.Sunken)
-        sep.setStyleSheet("background: #fff; min-height: 1px; max-height: 1px; margin: 18px 0;")
-        layout.addWidget(sep)
+        layout.addSpacing(20)
         start_btn = QPushButton("Commencer le Test")
         start_btn.setFont(QFont("Arial", 15, QFont.Bold))
         start_btn.setFixedHeight(40)
@@ -578,6 +613,7 @@ class TestNumeriqueModern(QMainWindow):
                 separator.setFrameShadow(QFrame.Plain)
                 separator.setStyleSheet("background-color: #222;")
                 separator.setFixedHeight(2)
+                separator.setMinimumWidth(100)
                 self.operation_layout.addWidget(separator)
                 self.operation_labels.append(separator)
                 label_result = QLabel(question['ligne_resultat'])
@@ -613,7 +649,7 @@ class TestNumeriqueModern(QMainWindow):
                 
                 letters = ['A', 'B', 'C', 'D', 'E']
                 for i, op_data in enumerate(question['propositions'][:5]):
-                    # Conteneur pour chaque opération + son bouton radio
+                    # Conteneur pour chaque opération
                     op_col = QWidget()
                     op_col_layout = QVBoxLayout(op_col)
                     op_col_layout.setSpacing(0)
@@ -655,27 +691,36 @@ class TestNumeriqueModern(QMainWindow):
                     op_inner_layout.addWidget(result_lbl)
                     
                     op_col_layout.addWidget(op_widget)
-                    
-                    # Bouton radio avec lettre en dessous
                     op_col_layout.addSpacing(3)
-                    self.radio_buttons[i].setText(letters[i])
-                    self.radio_buttons[i].setFont(QFont("Arial", 16, QFont.Bold))
-                    op_col_layout.addWidget(self.radio_buttons[i], alignment=Qt.AlignCenter)
                     
                     ops_layout.addWidget(op_col)
                 
                 self.operation_layout.addWidget(ops_container)
                 self.operation_labels.append(ops_container)
                 
-                # Décocher tous les boutons
+                # Configurer les boutons radio avec les lettres (garder les boutons dans propositions_container)
+                self.propositions_container.show()
                 self.button_group.setExclusive(False)
-                for r in self.radio_buttons:
+                for i, r in enumerate(self.radio_buttons):
                     r.setChecked(False)
+                    r.setText(letters[i])
+                    r.setFont(QFont("Arial", 16, QFont.Bold))
                 self.button_group.setExclusive(True)
                 
-                # Cacher le conteneur de propositions standard
-                self.propositions_container.hide()
-                return  # Sortir tôt pour ne pas traiter les propositions normalement
+                # Restaurer la réponse précédente si elle existe
+                if self.user_answers[self.current_question] != -1:
+                    self.radio_buttons[self.user_answers[self.current_question]].setChecked(True)
+                
+                # Gérer la navigation pour ce type de question
+                self.prev_button.setEnabled(self.current_question > 0)
+                if self.current_question == len(self.questions) - 1:
+                    self.next_button.hide()
+                    self.submit_button.show()
+                else:
+                    self.next_button.show()
+                    self.submit_button.hide()
+                
+                return  # Sortir tôt
             
             # Affichage propositions normales
             self.propositions_container.show()
@@ -687,6 +732,10 @@ class TestNumeriqueModern(QMainWindow):
             
             for i, (radio, option) in enumerate(zip(self.radio_buttons, question['propositions'])):
                 radio.setText(str(option))
+            
+            # Restaurer la réponse précédente si elle existe
+            if self.user_answers[self.current_question] != -1:
+                self.radio_buttons[self.user_answers[self.current_question]].setChecked(True)
             
             # Navigation
             self.prev_button.setEnabled(self.current_question > 0)
@@ -760,12 +809,8 @@ class TestNumeriqueModern(QMainWindow):
         title.setMinimumHeight(80)
         main_layout.addWidget(title)
         
-        # Séparateur
-        sep1 = QFrame()
-        sep1.setFrameShape(QFrame.HLine)
-        sep1.setFrameShadow(QFrame.Sunken)
-        sep1.setStyleSheet("background: #fff; min-height: 2px; max-height: 2px; margin: 25px 100px;")
-        main_layout.addWidget(sep1)
+        # Espacement
+        main_layout.addSpacing(30)
         
         # Message de remerciement
         thanks_msg = QLabel(
@@ -781,12 +826,8 @@ class TestNumeriqueModern(QMainWindow):
         thanks_msg.setMinimumHeight(250)
         main_layout.addWidget(thanks_msg)
         
-        # Séparateur
-        sep2 = QFrame()
-        sep2.setFrameShape(QFrame.HLine)
-        sep2.setFrameShadow(QFrame.Sunken)
-        sep2.setStyleSheet("background: #fff; min-height: 2px; max-height: 2px; margin: 25px 100px;")
-        main_layout.addWidget(sep2)
+        # Espacement
+        main_layout.addSpacing(30)
         
         # Conteneur des boutons
         buttons_container = QWidget()
@@ -871,10 +912,20 @@ class TestNumeriqueModern(QMainWindow):
 
 
 def main():
-    app = QApplication(sys.argv)
-    window = TestNumeriqueModern()
-    window.showMaximized()
-    sys.exit(app.exec_())
+    try:
+        print("Démarrage de l'application...")
+        app = QApplication(sys.argv)
+        print("QApplication créée")
+        window = TestNumeriqueModern()
+        print("Fenêtre créée")
+        window.showMaximized()
+        print("Fenêtre affichée")
+        sys.exit(app.exec_())
+    except Exception as e:
+        print(f"ERREUR FATALE: {e}")
+        traceback.print_exc()
+        input("Appuyez sur Entrée pour fermer...")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
