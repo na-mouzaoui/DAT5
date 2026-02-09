@@ -83,19 +83,18 @@
       "reponse_correcte": 2
     },
     {
-      "type": "vertical",
-      "operation": "multiplication",
-      "ligne1": "   36",
-      "ligne2": "×  12",
-      "ligne_resultat": "  ???",
-      "propositions": ["412", "422", "432", "442", "452"],
-      "reponse_correcte": 2
+      "type": "image",
+      "phrase": "Que représente ce schéma ?",
+      "image_path": "qst.png",
+      "propositions": ["Proposition A", "Proposition B", "Proposition C", "Proposition D", "Proposition E"],
+      "reponse_correcte": 0
     },
     {
-      "type": "racine",
-      "phrase": "√100 = ?",
-      "propositions": ["8", "9", "10", "11", "12"],
-      "reponse_correcte": 2
+      "type": "image",
+      "phrase": "Que représente ce schéma ?",
+      "image_path": "qst.png",
+      "propositions": ["Réponse 1", "Réponse 2", "Réponse 3", "Réponse 4", "Réponse 5"],
+      "reponse_correcte": 1
     }
   ]
 }

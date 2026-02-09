@@ -1,9 +1,10 @@
 import sys
 import json
 import traceback
+import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,QHBoxLayout, QLabel, QRadioButton, QPushButton,QButtonGroup, QMessageBox, QFrame, QLineEdit, QFormLayout,QStackedWidget, QInputDialog, QScrollArea)
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QPixmap
 import datetime
 try:
     from pdf_generator import generate_test_report_pdf
@@ -629,6 +630,35 @@ class TestNumeriqueModern(QMainWindow):
                 label.setStyleSheet("color: #222; background: transparent; padding: 5px;")
                 self.operation_layout.addWidget(label)
                 self.operation_labels.append(label)
+            elif question.get('type') == 'image':
+                # Afficher la question textuelle
+                phrase_label = QLabel(question['phrase'])
+                phrase_label.setFont(QFont("Arial", 20, QFont.Bold))
+                phrase_label.setAlignment(Qt.AlignCenter)
+                phrase_label.setStyleSheet("color: #222; background: transparent; padding: 10px;")
+                self.operation_layout.addWidget(phrase_label)
+                self.operation_labels.append(phrase_label)
+                
+                # Afficher l'image
+                image_path = question.get('image_path', '')
+                if image_path and os.path.exists(image_path):
+                    image_label = QLabel()
+                    pixmap = QPixmap(image_path)
+                    # Redimensionner l'image si nécessaire (max 900x600)
+                    if pixmap.width() > 900 or pixmap.height() > 600:
+                        pixmap = pixmap.scaled(900, 800, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                    image_label.setPixmap(pixmap)
+                    image_label.setAlignment(Qt.AlignCenter)
+                    image_label.setStyleSheet("padding: 15px;")
+                    self.operation_layout.addWidget(image_label)
+                    self.operation_labels.append(image_label)
+                else:
+                    error_label = QLabel(f"Image non trouvée: {image_path}")
+                    error_label.setFont(QFont("Arial", 14))
+                    error_label.setAlignment(Qt.AlignCenter)
+                    error_label.setStyleSheet("color: #f44336; padding: 10px;")
+                    self.operation_layout.addWidget(error_label)
+                    self.operation_labels.append(error_label)
             elif question.get('type') == 'operations_verticales':
                 # Afficher la question textuelle
                 phrase_label = QLabel(question['phrase'])
